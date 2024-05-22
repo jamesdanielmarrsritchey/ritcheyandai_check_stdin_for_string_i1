@@ -1,1 +1,0 @@
-# ritcheyandai_check_stdin_for_string_i1

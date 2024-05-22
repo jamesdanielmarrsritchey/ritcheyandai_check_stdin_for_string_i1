@@ -1,0 +1,90 @@
+jamesdanielmarrsritchey: Using C++, create a program which accepts data from stdin, and checks to see if it contains a specified string. The specified string is passed as a commandline argument. If the string is found, the program should return the byte count of where it starts. If the string is not found, it should return bool false.
+
+GitHub Copilot: Here is a simple C++ program that fulfills your requirements. It reads data from `stdin`, checks if it contains a specified string passed as a command-line argument, and returns the byte count of where it starts. If the string is not found, it returns `false`.
+
+```cpp
+#include <iostream>
+#include <string>
+
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        std::cerr << "Usage: " << argv[0] << " <search_string>\n";
+        return 1;
+    }
+
+    std::string search_string = argv[1];
+    std::string input;
+    std::getline(std::cin, input);
+
+    size_t found = input.find(search_string);
+    if (found != std::string::npos) {
+        std::cout << found << '\n';
+    } else {
+        std::cout << std::boolalpha << false << '\n';
+    }
+
+    return 0;
+}
+```
+
+This program first checks if the correct number of command-line arguments are provided. If not, it prints a usage message and exits with a non-zero status code. It then reads a line of input from `stdin` into a `std::string`. It uses the `find` member function of `std::string` to find the first occurrence of the search string in the input. If the string is found, it prints the byte count of where it starts (0-indexed). If the string is not found, `find` returns `std::string::npos`, and the program prints `false`.
+
+jamesdanielmarrsritchey: Instead of printing false, exit with 1.
+
+GitHub Copilot: Sure, here's the updated code. Now, if the string is not found, the program will exit with a status code of 1.
+
+```cpp
+#include <iostream>
+#include <string>
+
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        std::cerr << "Usage: " << argv[0] << " <search_string>\n";
+        return 1;
+    }
+
+    std::string search_string = argv[1];
+    std::string input;
+    std::getline(std::cin, input);
+
+    size_t found = input.find(search_string);
+    if (found != std::string::npos) {
+        std::cout << found << '\n';
+        return 0;
+    } else {
+        return 1;
+    }
+}
+```
+
+In this updated version, if the string is found, the program prints the byte count of where it starts and then returns 0 to indicate successful execution. If the string is not found, the program simply returns 1 to indicate an error.
+
+jamesdanielmarrsritchey: Commandline arguments should have prefixes.
+
+GitHub Copilot: If you want to use command-line arguments with prefixes, you can use a library like Boost.Program_options. However, for simplicity, here's a basic implementation without any external libraries. This version expects the search string to be passed with a `-s` or `--search` prefix.
+
+```cpp
+#include <iostream>
+#include <string>
+
+int main(int argc, char* argv[]) {
+    if (argc != 3 || (std::string(argv[1]) != "-s" && std::string(argv[1]) != "--search")) {
+        std::cerr << "Usage: " << argv[0] << " -s <search_string>\n";
+        return 1;
+    }
+
+    std::string search_string = argv[2];
+    std::string input;
+    std::getline(std::cin, input);
+
+    size_t found = input.find(search_string);
+    if (found != std::string::npos) {
+        std::cout << found << '\n';
+        return 0;
+    } else {
+        return 1;
+    }
+}
+```
+
+This version of the program expects the command-line arguments to be in the form `-s <search_string>` or `--search <search_string>`. If the arguments are not in this form, it prints a usage message and exits with a non-zero status code. The rest of the program is the same as before.
